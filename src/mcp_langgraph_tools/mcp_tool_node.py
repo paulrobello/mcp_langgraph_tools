@@ -97,9 +97,11 @@ def mcp_tool_node(
 async def mcp_tool_list(session: ClientSession) -> list[dict[str, Any]]:
     """Gets list of tools from MCP and converts to OpenAI standard schema."""
     try:
-        mcp_tools = (await session.list_tools()).tools
+        res = await session.list_tools()
+        mcp_tools = res.tools
     except Exception as _:
         mcp_tools = []
+    console.print(mcp_tools)
     # map mcp tools to openai spec dict
     llm_tools = [
         {

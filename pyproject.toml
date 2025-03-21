@@ -1,27 +1,65 @@
 [project]
 name = "mcp_langgraph_tools"
-version = "0.1.0"
+dynamic = [
+    "version",
+]
 description = "Mcp Langgraph Tools"
 readme = "README.md"
+url = "https://github.com/paulrobello/mcp_langgraph_tools"
+authors = [
+    { name = "Paul Robello", email = "probello@gmail.com" },
+]
+maintainers = [
+    { name = "Paul Robello", email = "probello@gmail.com" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Other Audience",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Terminals",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+keywords = [
+    "langgraph",
+    "mcp",
+    "agent",
+    "ai",
+    "terminal",
+    "tui",
+]
 requires-python = ">=3.11"
 dependencies = [
     "asyncio>=3.4.3",
-    "langchain-anthropic>=0.1.23",
-    "langchain-community>=0.2.12",
-    "langchain-core>=0.2.34",
-    "langchain-google-genai>=1.0.10",
-    "langchain-groq>=0.1.9",
-    "langchain-ollama>=0.1.1",
-    "langchain-openai>=0.1.22",
-    "langchain>=0.2.14",
-    "langgraph>=0.2.14",
-    "mcp>=1.0.0",
-    "orjson>=3.10.12",
-    "pydantic>=2.8.2",
+    "langchain-anthropic>=0.3.10",
+    "langchain-community>=0.3.20",
+    "langchain-core>=0.3.46",
+    "langchain-google-genai>=2.0.10",
+    "langchain-groq>=0.3.0",
+    "langchain-ollama>=0.2.3",
+    "langchain-openai>=0.3.9",
+    "langchain>=0.3.21",
+    "langgraph>=0.3.18",
+    "mcp>=1.4.1",
+    "orjson>=3.10.15",
+    "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
-    "rich>=13.7.1",
+    "rich>=13.9.4",
 ]
-packages = ["src/mcp_langgraph_tools"]
+packages = [
+    "src/mcp_langgraph_tools",
+]
 
 [project.scripts]
 mcp_langgraph_tools = "mcp_langgraph_tools.__main__:main"
@@ -34,38 +72,25 @@ mcp_langgraph_tools = [
     "*/*.tcss",
     "*.png",
     "*.md",
-    "*.tcss"
-]
-
-[build-system]
-requires = ["hatchling", "wheel"]
-build-backend = "hatchling.build"
-
-[tool.uv]
-dev-dependencies = [
-    "build>=1.2.1",
-    "twine>=5.1.1",
-    "pyright>=1.1.379",
-    "pre-commit>=3.8.0",
-    "ruff>=0.7.0",
-    "types-orjson>=3.6.2",
-    "pyinstrument>=5.0.0",
+    "*.tcss",
 ]
 
 [tool.hatch.version]
 path = "src/mcp_langgraph_tools/__init__.py"
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.build.targets.wheel]
-packages = ["src/mcp_langgraph_tools"]
+packages = [
+    "src/mcp_langgraph_tools",
+]
 include = [
     "*.py",
     "py.typed",
     "*.png",
     "*.md",
     "*.tcss",
-    "*.png",
-    "*.md",
-    "*.tcss"
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -73,11 +98,27 @@ include = [
     "src/mcp_langgraph_tools",
     "LICENSE",
     "README.md",
-    "pyproject.toml"
+    "pyproject.toml",
 ]
 exclude = [
     "*.pyc",
     "__pycache__",
     "*.so",
-    "*.dylib"
+    "*.dylib",
+]
+
+[build-system]
+requires = [
+    "hatchling",
+]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "build>=1.2.1",
+    "pyright>=1.1.379",
+    "pre-commit>=4.2.0",
+    "ruff>=0.11.1",
+    "types-orjson>=3.6.2",
+    "pyinstrument>=5.0.1",
 ]

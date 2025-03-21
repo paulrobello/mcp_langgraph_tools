@@ -28,14 +28,39 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 - You will need and API key for the chosen AI provider which defaults to Anthropic but can be changed by editing the `__main__.py` file
 - Put all api keys in a .env file in the repository root.
 
+## create a config.json in the root of the repo
+
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "YOUR BRAVE API KEY"
+      }
+    }
+  }
+}
+
+```
+
+## create a .env file in the root fo the repo with your anthropic api key
+```
+ANTHROPIC_API_KEY=YOUR_KEY
+```
+
 ## From source Usage
 ```shell
-uv run mcp_langgraph_tools
+uv run mcp_langgraph_tools "your question that needs search"
 ```
 
 ## Whats New
 
-- Version 0.1.0:
+- Version 0.2.0:
   - Initial release
 
 ## Contributing

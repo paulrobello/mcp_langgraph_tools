@@ -5,6 +5,7 @@ import orjson as json
 import os
 from contextlib import AsyncExitStack
 from pathlib import Path
+import argparse
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client, get_default_environment
@@ -19,6 +20,10 @@ from langgraph.prebuilt import tools_condition
 
 from .mcp_tool_node import mcp_tool_list, mcp_tool_node, combined_tool_node, McpToolNode
 
+parser = argparse.ArgumentParser(description="Process user input for the AI assistant.")
+parser.add_argument("user_input", nargs="*", help="The user's input to the AI assistant")
+args = parser.parse_args()
+
 load_dotenv()
 
 console = Console()
@@ -27,9 +32,7 @@ config_file = Path("config.json")
 
 
 class McpServerConfig(StdioServerParameters):
-    model_config = {
-        "arbitrary_types_allowed": True
-    }
+    model_config = {"arbitrary_types_allowed": True}
     session: ClientSession | None = None
     llm_tools: list[dict[str, Any]] = Field(default_factory=list)
 
@@ -67,24 +70,12 @@ mcp_servers: McpServers = load_config(config_file)
 #     # StdioServerParameters(
 #     # ),
 #     # StdioServerParameters(
-#     #     command="uvx",
-#     #     args=["mcp-server-fetch", "--ignore-robots-txt", "--user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36"],
-#     #     env={
-#     #         "PATH": os.environ.get("PATH"),  # adding PATH helps MCP spawned process find things your path
-#     #     },
-#     # ),
-#     # StdioServerParameters(
-#     #     command="npx",
-#     #     args=["-y", "@modelcontextprotocol/server-memory@latest"],
-#     #     env={
-#     #         "PATH": os.environ.get("PATH"),  # adding PATH helps MCP spawned process find things your path
-#     #     },
 #     # ),
 # ]
 
 
 # Works with any tool capable LLM
-llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", timeout=10.0) # type:ignore
+llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", timeout=10.0)  # type:ignore
 # llm = ChatOpenAI(model="gpt-4o")
 # llm = ChatOllama(model="llama3.2:latest")
 
@@ -93,7 +84,6 @@ async def amain():
     """Async main function to connect to MCP."""
     llm_tools: list[dict] = []
     tool_nodes: list[McpToolNode] = []
-
     async with AsyncExitStack() as stack:
         for server_name, server_params in mcp_servers.mcpServers.items():
             try:
@@ -101,11 +91,13 @@ async def amain():
                     f"Connecting to MCP server {server_name} {server_params.command + ' ' + (' '.join(server_params.args))}..."
                 )
                 client = await stack.enter_async_context(stdio_client(server_params))
-                # console.print(f"Starting session on MCP server {server_params.command}...")
+                console.print(f"Starting session on MCP server {server_params.command}...")
+                # session = await stack.enter_async_context(ClientSession(*client, read_timeout_seconds=timedelta(seconds=30)))
                 session = await stack.enter_async_context(ClientSession(*client))
+                console.print(f"Initializing session on MCP server {server_params.command}...")
                 await session.initialize()
                 server_params.session = session
-                # console.print("Getting list of tools...")
+                console.print("Getting list of tools...")
                 server_tools = await mcp_tool_list(session)
                 tool_node = mcp_tool_node(session, server_tools)
                 # tool_node = McpToolNode(session, handle_tool_errors=False)
@@ -118,14 +110,14 @@ async def amain():
                 tool_nodes.append(tool_node)
             except Exception as e:
                 console.print(
-                    f"Failed to connect to MCP server {server_name} {server_params.command + ' '  + (' '.join(server_params.args))}:",
+                    f"Failed to connect to MCP server {server_name} {server_params.command + ' ' + (' '.join(server_params.args))}:",
                     e,
                 )
                 exit(1)
                 # continue
 
         console.print("Connected to MCP servers.")
-
+        # exit(0)
         if not llm_tools:
             console.print("No MCP tools available from any server.")
             return
@@ -157,9 +149,11 @@ async def amain():
 
         messages = [
             HumanMessage(
+                content=" ".join(args.user_input)
                 # content="Search for Paul Robello the Principal Solution Architect and give me the current time"
                 # content = "Search for Paul Robello the Principal Solution Architect"
-                content="summarize the contents of url https://par-com.net/"
+                # content="summarize the contents of url https://par-com.net/"
+                # content = "show me the current knowledge graph"
             )
         ]
         # Invoke the graph with initial messages
