@@ -6,21 +6,23 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "asyncio>=3.4.3",
-    "langchain-anthropic>=0.1.23",
-    "langchain-community>=0.2.12",
-    "langchain-core>=0.2.34",
-    "langchain-google-genai>=1.0.10",
-    "langchain-groq>=0.1.9",
-    "langchain-ollama>=0.1.1",
-    "langchain-openai>=0.1.22",
-    "langchain>=0.2.14",
-    "langgraph>=0.2.14",
+    "langchain-anthropic>=0.3.10",
+    "langchain-community>=0.3.20",
+    "langchain-core>=0.3.46",
+    "langchain-google-genai>=2.0.10",
+    "langchain-groq>=0.3.0",
+    "langchain-ollama>=0.2.3",
+    "langchain-openai>=0.3.9",
+    "langchain>=0.3.21",
+    "langgraph>=0.3.18",
     "mcp>=1.0.0",
-    "pydantic>=2.8.2",
+    "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
-    "rich>=13.7.1",
+    "rich>=13.9.4",
 ]
-packages = ["src/mcp_langgraph_tools"]
+packages = [
+    "src/mcp_langgraph_tools",
+]
 
 [project.scripts]
 mcp_langgraph_tools = "mcp_langgraph_tools.__main__:main"
@@ -33,12 +35,8 @@ mcp_langgraph_tools = [
     "*/*.tcss",
     "*.png",
     "*.md",
-    "*.tcss"
+    "*.tcss",
 ]
-
-[build-system]
-requires = ["hatchling", "wheel"]
-build-backend = "hatchling.build"
 
 [tool.uv]
 dev-dependencies = [
@@ -55,7 +53,9 @@ dev-dependencies = [
 path = "src/mcp_langgraph_tools/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mcp_langgraph_tools"]
+packages = [
+    "src/mcp_langgraph_tools",
+]
 include = [
     "*.py",
     "py.typed",
@@ -64,7 +64,7 @@ include = [
     "*.tcss",
     "*.png",
     "*.md",
-    "*.tcss"
+    "*.tcss",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -72,11 +72,18 @@ include = [
     "src/mcp_langgraph_tools",
     "LICENSE",
     "README.md",
-    "pyproject.toml"
+    "pyproject.toml",
 ]
 exclude = [
     "*.pyc",
     "__pycache__",
     "*.so",
-    "*.dylib"
+    "*.dylib",
 ]
+
+[build-system]
+requires = [
+    "hatchling",
+    "wheel",
+]
+build-backend = "hatchling.build"

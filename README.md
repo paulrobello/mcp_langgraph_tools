@@ -33,6 +33,9 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 uv run mcp_langgraph_tools
 ```
 
+## Multiple MCP servers at one time
+Check the multi_server branch for a more advanced example of how to use multiple MCP servers at once.
+
 ## Whats New
 
 - Version 0.1.0:
