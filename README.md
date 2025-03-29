@@ -48,7 +48,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ```
 
-## create a .env file in the root fo the repo with your anthropic api key
+## create a .env file in the root fo the repo with your chosen ai provider api key. The example defaults to Anthropic.
 ```
 ANTHROPIC_API_KEY=YOUR_KEY
 ```

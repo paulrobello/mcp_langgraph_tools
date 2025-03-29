@@ -1,4 +1,5 @@
 import asyncio
+from datetime import timedelta
 from typing import Any
 
 import orjson as json
@@ -62,16 +63,6 @@ def load_config(file: Path) -> McpServers:
 
 
 mcp_servers: McpServers = load_config(config_file)
-# console.print(server_servers)
-# exit(0)
-
-# Define MCP Server Parameters
-# servers: list[StdioServerParameters] = [
-#     # StdioServerParameters(
-#     # ),
-#     # StdioServerParameters(
-#     # ),
-# ]
 
 
 # Works with any tool capable LLM
@@ -92,8 +83,10 @@ async def amain():
                 )
                 client = await stack.enter_async_context(stdio_client(server_params))
                 console.print(f"Starting session on MCP server {server_params.command}...")
-                # session = await stack.enter_async_context(ClientSession(*client, read_timeout_seconds=timedelta(seconds=30)))
-                session = await stack.enter_async_context(ClientSession(*client))
+                session = await stack.enter_async_context(
+                    ClientSession(*client, read_timeout_seconds=timedelta(seconds=30))
+                )
+                # session = await stack.enter_async_context(ClientSession(*client))
                 console.print(f"Initializing session on MCP server {server_params.command}...")
                 await session.initialize()
                 server_params.session = session
@@ -150,10 +143,6 @@ async def amain():
         messages = [
             HumanMessage(
                 content=" ".join(args.user_input)
-                # content="Search for Paul Robello the Principal Solution Architect and give me the current time"
-                # content = "Search for Paul Robello the Principal Solution Architect"
-                # content="summarize the contents of url https://par-com.net/"
-                # content = "show me the current knowledge graph"
             )
         ]
         # Invoke the graph with initial messages

@@ -70,6 +70,6 @@ __pypackages__/
 **/.venv
 **/.env
 **/.idea
-/config.json
+/config*.json
 /output/
 /history.json
